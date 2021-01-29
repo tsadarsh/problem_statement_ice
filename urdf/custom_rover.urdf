@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com)
+     Commit Version: 1.4.4-24-g24328f6  Build Version: 1.5.7084.36479
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot name="URDFtestwithcam">
+
+  <material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+
+  <material name="red">
+    <color rgba="0.8 0 0 1"/>
+  </material>
+
+	<link name="base_link"></link>
+
+  <link name="base">
+    <inertial>
+      <origin
+        xyz="0.0052811 0.064297 -0.0088091"
+        rpy="0 0 0" />
+      <mass
+        value="13.77" />
+      <inertia
+        ixx="0.14162"
+        ixy="-7.334E-17"
+        ixz="3.7952E-11"
+        iyy="0.63119"
+        iyz="0.00036178"
+        izz="0.53062" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/base.STL" />
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/base.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="dummy_to_base" type="fixed">
+  	<origin xyz="0 0 0" rpy="1.57 0 0"/>
+  	<parent link="base_link"/>
+  	<child link="base"/>
+  </joint>
+
+  <link name="one">
+    <inertial>
+      <origin
+        xyz="0 -5.55111512312578E-17 -6.93889390390723E-17"
+        rpy="0 0 0" />
+      <mass
+        value="18.522197740641" />
+      <inertia
+        ixx="0.175515725875798"
+        ixy="-3.73056609646052E-17"
+        ixz="-7.97826013903642E-17"
+        iyy="0.175515725875798"
+        iyz="3.93262024862155E-17"
+        izz="0.264143297899433" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/one.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.686274509803922 0.658823529411765 0.63921568627451 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/one.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="revone" type="continuous">
+    <origin
+      xyz="-0.4 -0.155 -0.35"
+      rpy="0 0 0" />
+    <parent
+      link="base" />
+    <child
+      link="one" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      effort="1"
+      velocity="0.5" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+  <link name="two">
+    <inertial>
+      <origin
+        xyz="0 1.66533453693773E-16 0"
+        rpy="0 0 0" />
+      <mass
+        value="18.522197740641" />
+      <inertia
+        ixx="0.175515725875798"
+        ixy="1.36341728909766E-17"
+        ixz="-1.84075661983385E-17"
+        iyy="0.175515725875798"
+        iyz="4.08047204801776E-17"
+        izz="0.264143297899433" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/two.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.686274509803922 0.658823529411765 0.63921568627451 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/two.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="revtwo" type="continuous">
+    <origin
+      xyz="-0.4 -0.155 0.35"
+      rpy="0 0 0" />
+    <parent
+      link="base" />
+    <child
+      link="two" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="1"
+      velocity="0.5" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+  <link name="three">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="18.522197740641" />
+      <inertia
+        ixx="0.175515725875798"
+        ixy="-2.20513583343706E-17"
+        ixz="-6.6914147002302E-18"
+        iyy="0.175515725875798"
+        iyz="2.15396436166859E-17"
+        izz="0.264143297899434" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/three.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.686274509803922 0.658823529411765 0.63921568627451 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/three.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="revthree" type="continuous">
+    <origin
+      xyz="0.4 -0.155 0.35"
+      rpy="0 0 0" />
+    <parent
+      link="base" />
+    <child
+      link="three" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="1"
+      velocity="0.5" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+  <link name="four">
+    <inertial>
+      <origin
+        xyz="-5.55111512312578E-17 -5.55111512312578E-17 1.38777878078145E-17"
+        rpy="0 0 0" />
+      <mass
+        value="18.522197740641" />
+      <inertia
+        ixx="0.175515725875798"
+        ixy="-3.94805912055889E-17"
+        ixz="-1.61587524041896E-17"
+        iyy="0.175515725875798"
+        iyz="1.26567879060009E-17"
+        izz="0.264143297899434" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/four.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.686274509803922 0.658823529411765 0.63921568627451 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/four.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="revfour" type="continuous">
+    <origin
+      xyz="0.4 -0.155 -0.35"
+      rpy="0 0 0" />
+    <parent
+      link="base" />
+    <child
+      link="four" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      effort="1"
+      velocity="0.5" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+  <link name="five">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/five.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/five.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="cam" type="fixed">
+    <origin
+      xyz="0.40396 0.63028 -0.033851"
+      rpy="0 0 -0.081009" />
+    <parent
+      link="base" />
+    <child
+      link="five" />
+    <axis
+      xyz="0 0 0" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+	<gazebo>
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
+	</gazebo>
+
+</robot>
