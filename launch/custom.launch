@@ -1,6 +1,6 @@
 <launch>
   <!-- Load simulation environment -->
-  <arg name="model" default="$(find trial)/urdf/custom_rover.urdf"/>
+  <arg name="model" default="$(find trial)/urdf/custom_rover.urdf.xacro"/>
   <arg name="x_pos" default="0.5"/>
   <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="1.0"/>
@@ -19,4 +19,35 @@
 
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
         args="-z 1.0 -unpause -urdf -model robot -param robot_description" respawn="false" output="screen" />
+
+  <!-- robot control -->
+  <rosparam command="load" file="$(find trial)/config/joints.yaml"
+    ns="arora_controller"/>
+
+  <rosparam command="load" file="$(find trial)/config/revone.yaml"
+    ns="arora_revone_controller"/>
+
+  <rosparam command="load" file="$(find trial)/config/gripper.yaml"
+    ns="arora_gripper_controller"/>
+
+  <rosparam command="load" file="$(find trial)/config/gripper_arm.yaml"
+    ns="arora_gripper_arm_controller"/>
+
+  <!--
+  <rosparam command="load" file="$(find trial)/config/diffdrive.yaml"
+    ns="arora_diffdrive_controller"/>
+  -->
+
+  <node name="arora_control_spawner" pkg="controller_manager" type="spawner"
+    args="arora_controller
+          arora_revone_controller
+          arora_gripper_controller
+          arora_gripper_arm_controller"/>
+
+<!--
+  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/arora_diffdrive_controller/cmd_vel"/>
+  </node>
+-->
+
 </launch>

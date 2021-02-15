@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com)
+     Commit Version: 1.4.4-24-g24328f6  Build Version: 1.5.7084.36479
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="URDFtestwithcam">
+
+  <material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+
+  <material name="red">
+    <color rgba="0.8 0 0 1"/>
+  </material>
+
+	<link name="base_link"></link>
+
+  <link name="base">
+    <inertial>
+      <origin
+        xyz="0.0052811 0.064297 -0.0088091"
+        rpy="0 0 0" />
+      <mass
+        value="13.77" />
+      <inertia
+        ixx="0.14162"
+        ixy="-7.334E-17"
+        ixz="3.7952E-11"
+        iyy="0.63119"
+        iyz="0.00036178"
+        izz="0.53062" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/base.STL" />
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/base.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="dummy_to_base" type="fixed">
+  	<origin xyz="0 0 0" rpy="1.57 0 0"/>
+  	<parent link="base_link"/>
+  	<child link="base"/>
+  </joint>
+
+  <link name="one">
+    <inertial>
+      <origin
+        xyz="0 -5.55111512312578E-17 -6.93889390390723E-17"
+        rpy="0 0 0" />
+      <mass
+        value="18.522197740641" />
+      <inertia
+        ixx="0.175515725875798"
+        ixy="-3.73056609646052E-17"
+        ixz="-7.97826013903642E-17"
+        iyy="0.175515725875798"
+        iyz="3.93262024862155E-17"
+        izz="0.264143297899433" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/one.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.686274509803922 0.658823529411765 0.63921568627451 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/one.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<!-- gripper -->
+  <xacro:property name="width" value="0.2" />
+  <xacro:property name="polelen" value="0.2" />
+  <xacro:property name="poleht" value="0.2" />
+  <xacro:macro name="default_inertial" params="mass">
+    <inertial>
+      <mass value="${mass}" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+    </inertial>
+  </xacro:macro>
+
+  <link name="gripper_base_fixed">
+    <visual>
+      <geometry>
+        <cylinder length="${poleht}" radius="0.02"/>
+      </geometry>
+    </visual>
+    <origin xyz="0 0 0"/>
+    <xacro:default_inertial mass="0.05"/>
+    <collision>
+      <geometry>
+        <cylinder length="${poleht}" radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="gripper_base_move">
+    <visual>
+      <geometry>
+        <cylinder length="${poleht}" radius="0.02"/>
+      </geometry>
+    </visual>
+    <origin xyz="0 0 0"/>
+    <xacro:default_inertial mass="0.05"/>
+    <collision>
+      <geometry>
+        <cylinder length="${poleht}" radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="base_link_to_gripper_base_fixed" type="fixed">
+    <parent link="base_link"/>
+    <child link="gripper_base_fixed"/>
+    <origin xyz="-0.4 0 ${poleht/2}"/>
+    <limit effort="30" velocity="0.2"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+
+  <joint name="base_link_to_gripper_base_move" type="revolute">
+    <axis xyz="0 1 0"/>
+    <parent link="base_link"/>
+    <child link="gripper_base_move"/>
+    <origin xyz="-0.4 0 ${poleht}"/>
+    <limit effort="30" lower="0" upper="${pi/4*-1}" velocity="0.2"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+
+  <transmission name="gripper_arm">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="gripper_arm_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="base_link_to_gripper_base_move">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <joint name="gripper_extension" type="continuous">
+    <axis xyz="0 0 1"/>
+    <parent link="gripper_base_move"/>
+    <child link="gripper_pole"/>
+    <limit effort="1000.0" velocity="0.5"/>
+    <origin rpy="0 0 0" xyz="0 0 ${poleht/2}"/>
+    <limit effort="30" velocity="0.2"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+
+  <link name="gripper_pole">
+    <visual>
+      <geometry>
+        <cylinder length="${polelen}" radius="0.01"/>
+      </geometry>
+      <origin xyz="${polelen/2} 0 0" rpy="0 ${pi/2*-1} 0 "/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${polelen}" radius="0.01"/>
+      </geometry>
+      <origin xyz="${polelen/2} 0 0" rpy="0 ${pi/2} 0 "/>
+    </collision>
+    <xacro:default_inertial mass="0.05"/>
+  </link>
+
+  <transmission name="gripper_extension_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="gripper_extension_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="gripper_extension">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <xacro:macro name="gripper" params="prefix reflect">
+    <joint name="${prefix}_gripper_joint" type="revolute">
+      <axis xyz="0 0 ${reflect}"/>
+      <limit effort="1000.0" lower="0.0" upper="0.548" velocity="0.5"/>
+      <origin rpy="0 0 0" xyz="${polelen} ${reflect*0.01} 0"/>
+      <parent link="gripper_pole"/>
+      <child link="${prefix}_gripper"/>
+      <limit effort="30" velocity="1.0"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+    <link name="${prefix}_gripper">
+      <visual>
+        <origin rpy="${(reflect-1)/2*pi} 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://urdf_tutorial/meshes/l_finger.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://urdf_tutorial/meshes/l_finger.dae"/>
+        </geometry>
+        <origin rpy="${(reflect-1)/2*pi} 0 0" xyz="0 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="0.05"/>
+    </link>
+    <transmission name="${prefix}_gripper_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="${prefix}_gripper_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="${prefix}_gripper_joint">
+        <hardwareInterface>PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+    <joint name="${prefix}_tip_joint" type="fixed">
+      <parent link="${prefix}_gripper"/>
+      <child link="${prefix}_tip"/>
+    </joint>
+    <link name="${prefix}_tip">
+      <visual>
+        <origin rpy="${(reflect-1)/2*pi} 0 0" xyz="0.09137 0.00495 0"/>
+        <geometry>
+          <mesh filename="package://urdf_tutorial/meshes/l_finger_tip.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://urdf_tutorial/meshes/l_finger_tip.dae"/>
+        </geometry>
+        <origin rpy="${(reflect-1)/2*pi} 0 0" xyz="0.09137 0.00495 0"/>
+      </collision>
+      <xacro:default_inertial mass="0.05"/>
+    </link>
+  </xacro:macro>
+
+  <xacro:gripper prefix="left" reflect="1" />
+  <xacro:gripper prefix="right" reflect="-1" />
+<!-- gripper end -->
+
+  <link name="two">
+    <inertial>
+      <origin
+        xyz="0 1.66533453693773E-16 0"
+        rpy="0 0 0" />
+      <mass
+        value="18.522197740641" />
+      <inertia
+        ixx="0.175515725875798"
+        ixy="1.36341728909766E-17"
+        ixz="-1.84075661983385E-17"
+        iyy="0.175515725875798"
+        iyz="4.08047204801776E-17"
+        izz="0.264143297899433" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/two.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.686274509803922 0.658823529411765 0.63921568627451 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/two.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="three">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="18.522197740641" />
+      <inertia
+        ixx="0.175515725875798"
+        ixy="-2.20513583343706E-17"
+        ixz="-6.6914147002302E-18"
+        iyy="0.175515725875798"
+        iyz="2.15396436166859E-17"
+        izz="0.264143297899434" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/three.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.686274509803922 0.658823529411765 0.63921568627451 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/three.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="four">
+    <inertial>
+      <origin
+        xyz="-5.55111512312578E-17 -5.55111512312578E-17 1.38777878078145E-17"
+        rpy="0 0 0" />
+      <mass
+        value="18.522197740641" />
+      <inertia
+        ixx="0.175515725875798"
+        ixy="-3.94805912055889E-17"
+        ixz="-1.61587524041896E-17"
+        iyy="0.175515725875798"
+        iyz="1.26567879060009E-17"
+        izz="0.264143297899434" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/four.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.686274509803922 0.658823529411765 0.63921568627451 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/four.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <xacro:macro name="revwheels" params="wheel_name org_x org_y org_z ax_z">
+    <joint name="rev${wheel_name}" type="continuous">
+      <origin xyz="${org_x*0.4} ${org_y*0.155} ${org_z*0.35}"/>
+      <parent link="base"/>
+      <child link="${wheel_name}"/>
+      <axis xyz="0 0 ${ax_z}"/>
+      <limit effort="1" velocity="0.5"/>
+      <safety_controller k_velocity="0"/>
+    </joint>
+
+    <transmission name="${wheel_name}_wheel_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="${wheel_name}_wheel_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="rev${wheel_name}">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+  <gazebo reference="${wheel_name}">
+    <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="base">
+    <material>Gazebo/Red</material>
+  </gazebo>
+  
+  </xacro:macro>
+  <xacro:revwheels wheel_name="one" org_x="-1" org_y="-1" org_z="-1" ax_z="-1"/>
+  <xacro:revwheels wheel_name="two" org_x="-1" org_y="-1" org_z="1" ax_z="-1"/>
+  <xacro:revwheels wheel_name="three" org_x="1" org_y="-1" org_z="1" ax_z="-1"/>
+  <xacro:revwheels wheel_name="four" org_x="1" org_y="-1" org_z="-1" ax_z="-1"/>
+
+  <link name="five">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/five.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDFtestwithcam/meshes/five.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="cam" type="fixed">
+    <origin
+      xyz="0.40396 0.63028 -0.033851"
+      rpy="0 0 -0.081009" />
+    <parent
+      link="base" />
+    <child
+      link="five" />
+    <axis
+      xyz="0 0 0" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+	<gazebo>
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
+	</gazebo>
+
+<!--   <transmission name="revone_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="$revone_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="revone">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission> -->
+
+</robot>
