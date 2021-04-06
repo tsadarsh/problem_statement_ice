@@ -1,2 +1,3 @@
 # problem_statement_ice
-rudra 20 trainee final project
+Final project for rudra 2020 trainees: 
+**Rover to traverse icy-terrain and collect samples at three different locations.**
